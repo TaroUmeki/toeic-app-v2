@@ -8,6 +8,7 @@ import com.example.toeicapp.model.User;
 import com.example.toeicapp.repository.MissedQuestionRepository;
 import com.example.toeicapp.repository.PassageRepository;
 import com.example.toeicapp.repository.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,7 @@ public class PassageController {
     @GetMapping
     public String list(Principal principal, Model model) {
         User user = CurrentUser.resolve(principal, userRepository);
-        model.addAttribute("passages", passageRepository.findAll());
+        model.addAttribute("passages", passageRepository.findAll(Sort.by("partType")));
         model.addAttribute("reviewCount", missedQuestionRepository.countByUser(user));
         return "passages";
     }

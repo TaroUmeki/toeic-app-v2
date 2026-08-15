@@ -45,6 +45,9 @@ public class DataSeedConfig {
             if (!existingTitles.contains("Part3 sample")) {
                 passageRepository.save(buildPart3());
             }
+            if (!existingTitles.contains("Part4 sample")) {
+                passageRepository.save(buildPart4());
+            }
         };
     }
 
@@ -167,6 +170,48 @@ public class DataSeedConfig {
         addChoice(q8, "D", "Cancel the meeting", false);
 
         return part3;
+    }
+
+    private static Passage buildPart4() {
+        Passage part4 = new Passage();
+        part4.setTitle("Part4 sample");
+        part4.setPartType("PART4");
+        part4.setSkillType("LISTENING");
+        part4.setAudioUrl("/audio/part4-sample.mp3");
+        part4.setAudioScript("Attention all staff. This is a reminder that our office network will be undergoing "
+                + "scheduled maintenance this Friday evening starting at 6 PM. During this time, email and internal "
+                + "file access will be temporarily unavailable. We expect the maintenance to be completed by 9 PM. "
+                + "If you need to access any files after hours, please make sure to download them before you leave "
+                + "the office today. We apologize for any inconvenience this may cause. Thank you for your cooperation.");
+
+        Question q9 = new Question();
+        q9.setQuestionText("What is the purpose of the announcement?");
+        q9.setExplanation("The speaker is informing staff about scheduled network maintenance.");
+        part4.addQuestion(q9);
+        addChoice(q9, "A", "To announce a company holiday", false);
+        addChoice(q9, "B", "To inform staff about network maintenance", true);
+        addChoice(q9, "C", "To request feedback from employees", false);
+        addChoice(q9, "D", "To reschedule a meeting", false);
+
+        Question q10 = new Question();
+        q10.setQuestionText("When will the maintenance begin?");
+        q10.setExplanation("The speaker says maintenance starts Friday evening at 6 PM.");
+        part4.addQuestion(q10);
+        addChoice(q10, "A", "Monday morning", false);
+        addChoice(q10, "B", "Friday at 6 PM", true);
+        addChoice(q10, "C", "Friday at 9 PM", false);
+        addChoice(q10, "D", "This weekend", false);
+
+        Question q11 = new Question();
+        q11.setQuestionText("What should employees do if they need files after hours?");
+        q11.setExplanation("The speaker asks staff to download files before leaving the office.");
+        part4.addQuestion(q11);
+        addChoice(q11, "A", "Contact IT support", false);
+        addChoice(q11, "B", "Come into the office", false);
+        addChoice(q11, "C", "Download them before leaving", true);
+        addChoice(q11, "D", "Wait until Monday", false);
+
+        return part4;
     }
 
     private static void addChoice(Question question, String label, String text, boolean correct) {

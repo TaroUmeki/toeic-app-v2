@@ -7,6 +7,7 @@ import com.example.toeicapp.model.Question;
 import com.example.toeicapp.model.User;
 import com.example.toeicapp.repository.MissedQuestionRepository;
 import com.example.toeicapp.repository.PassageRepository;
+import com.example.toeicapp.repository.StudyActivityRepository;
 import com.example.toeicapp.repository.UserRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -29,12 +30,15 @@ public class PassageController {
     private final PassageRepository passageRepository;
     private final UserRepository userRepository;
     private final MissedQuestionRepository missedQuestionRepository;
+    private final StudyActivityRepository studyActivityRepository;
 
     public PassageController(PassageRepository passageRepository, UserRepository userRepository,
-                              MissedQuestionRepository missedQuestionRepository) {
+                              MissedQuestionRepository missedQuestionRepository,
+                              StudyActivityRepository studyActivityRepository) {
         this.passageRepository = passageRepository;
         this.userRepository = userRepository;
         this.missedQuestionRepository = missedQuestionRepository;
+        this.studyActivityRepository = studyActivityRepository;
     }
 
     @GetMapping
@@ -42,6 +46,7 @@ public class PassageController {
         User user = CurrentUser.resolve(principal, userRepository);
         model.addAttribute("passages", passageRepository.findAll(Sort.by("partType")));
         model.addAttribute("reviewCount", missedQuestionRepository.countByUser(user));
+        model.addAttribute("streak", StudyActivityTracker.currentStreak(user, studyActivityRepository));
         return "passages";
     }
 
@@ -77,6 +82,7 @@ public class PassageController {
             }
             results.add(new QuestionResult(q, correctChoice, correct));
         }
+        StudyActivityTracker.recordToday(user, studyActivityRepository);
 
         model.addAttribute("passage", passage);
         model.addAttribute("results", results);

@@ -10,6 +10,7 @@
         .question.correct { border: 1px solid #2ec27e; background: #eafaf1; }
         .question.incorrect { border: 1px solid #e01b24; background: #fdecea; }
         .explanation { color: #555; font-size: 0.9rem; margin-top: 8px; }
+        .script { white-space: pre-line; background: #eee; padding: 8px; border-radius: 6px; margin-top: 8px; font-size: 0.9rem; }
         a.back { display: inline-block; margin-bottom: 16px; }
     </style>
 </head>
@@ -23,6 +24,7 @@
         <p th:text="${r.correct} ? '正解！' : '不正解'"></p>
         <p th:if="${!r.correct}" th:text="'正解: ' + ${r.correctChoice.label} + '. ' + ${r.correctChoice.choiceText}"></p>
         <p class="explanation" th:if="${r.question.explanation != null}" th:text="${r.question.explanation}"></p>
+        <div class="script" th:if="${r.question.passage.audioScript != null and !r.question.passage.audioScript.isEmpty()}" th:text="${r.question.passage.audioScript}"></div>
     </div>
 
     <a th:href="@{/review}">&larr; まだ間違えている問題を復習する</a>

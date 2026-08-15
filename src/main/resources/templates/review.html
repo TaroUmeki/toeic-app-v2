@@ -8,6 +8,7 @@
         .passage-group { margin-bottom: 32px; }
         .passage-group h2 { font-size: 1.1rem; margin-bottom: 8px; }
         .body-text { white-space: pre-line; background: #f7f7f7; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+        audio { width: 100%; margin-bottom: 16px; }
         .question { margin-bottom: 16px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
         .choice { display: block; margin: 6px 0; }
         button { padding: 10px 20px; font-size: 1rem; cursor: pointer; }
@@ -24,6 +25,9 @@
         <div class="passage-group" th:each="g : ${groups}">
             <h2 th:text="${g.passage.title}">Passage title</h2>
             <div class="body-text" th:if="${g.passage.body != null and !g.passage.body.isEmpty()}" th:text="${g.passage.body}"></div>
+            <audio th:if="${g.passage.audioUrl != null and !g.passage.audioUrl.isEmpty()}" controls="controls">
+                <source th:src="@{${g.passage.audioUrl}}" type="audio/mpeg" />
+            </audio>
 
             <div class="question" th:each="q : ${g.questions}">
                 <p th:text="${q.questionText}">Question text</p>

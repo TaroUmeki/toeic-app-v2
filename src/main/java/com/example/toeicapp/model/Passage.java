@@ -26,6 +26,9 @@ public class Passage {
     @Column(name = "audio_script")
     private String audioScript;
 
+    @Column(name = "audio_url")
+    private String audioUrl;
+
     @OneToMany(mappedBy = "passage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
@@ -44,6 +47,8 @@ public class Passage {
     public void setBody(String body) { this.body = body; }
     public String getAudioScript() { return audioScript; }
     public void setAudioScript(String audioScript) { this.audioScript = audioScript; }
+    public String getAudioUrl() { return audioUrl; }
+    public void setAudioUrl(String audioUrl) { this.audioUrl = audioUrl; }
     public List<Question> getQuestions() { return questions; }
     public void setQuestions(List<Question> questions) { this.questions = questions; }
 

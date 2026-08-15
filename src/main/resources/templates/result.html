@@ -10,6 +10,8 @@
         .question.correct { border: 1px solid #2ec27e; background: #eafaf1; }
         .question.incorrect { border: 1px solid #e01b24; background: #fdecea; }
         .explanation { color: #555; font-size: 0.9rem; margin-top: 8px; }
+        .script { white-space: pre-line; background: #f7f7f7; padding: 12px; border-radius: 8px; margin-bottom: 24px; }
+        .script h2 { font-size: 1rem; margin: 0 0 8px; }
         a.back { display: inline-block; margin-bottom: 16px; }
     </style>
 </head>
@@ -17,6 +19,11 @@
     <a class="back" th:href="@{/passages}">&larr; 一覧に戻る</a>
     <h1 th:text="${passage.title}">Title</h1>
     <div class="score" th:text="'スコア: ' + ${correctCount} + ' / ' + ${total}">Score</div>
+
+    <div class="script" th:if="${passage.audioScript != null and !passage.audioScript.isEmpty()}">
+        <h2>スクリプト</h2>
+        <div th:text="${passage.audioScript}"></div>
+    </div>
 
     <div class="question" th:each="r : ${results}" th:classappend="${r.correct} ? 'correct' : 'incorrect'">
         <p th:text="${r.question.questionText}">Question</p>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+    <style>
+        body { font-family: sans-serif; max-width: 360px; margin: 80px auto; padding: 0 16px; color: #222; }
+        h1 { font-size: 1.5rem; }
+        label { display: block; margin-top: 12px; font-size: 0.9rem; }
+        input { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; margin-top: 20px; font-size: 1rem; cursor: pointer; }
+        .error { color: #e01b24; font-size: 0.9rem; margin-top: 12px; }
+        .info { color: #2ec27e; font-size: 0.9rem; margin-top: 12px; }
+        .register-link { display: block; margin-top: 16px; text-align: center; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <h1>TOEIC Practice</h1>
+    <form th:action="@{/login}" method="post">
+        <label>ユーザー名
+            <input type="text" name="username" required="required" />
+        </label>
+        <label>パスワード
+            <input type="password" name="password" required="required" />
+        </label>
+        <button type="submit">ログイン</button>
+    </form>
+    <p class="error" th:if="${param.error}">ユーザー名またはパスワードが違います。</p>
+    <p class="info" th:if="${param.logout}">ログアウトしました。</p>
+    <p class="info" th:if="${param.registered}">登録が完了しました。ログインしてください。</p>
+    <a class="register-link" th:href="@{/register}">アカウントをお持ちでない方はこちら</a>
+</body>
+</html>

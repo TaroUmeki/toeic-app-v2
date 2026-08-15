@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${passage.title}">Quiz</title>
+    <style>
+        body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 16px; color: #222; }
+        .body-text { white-space: pre-line; background: #f7f7f7; padding: 12px; border-radius: 8px; margin-bottom: 24px; }
+        .question { margin-bottom: 24px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+        .choice { display: block; margin: 6px 0; }
+        button { padding: 10px 20px; font-size: 1rem; cursor: pointer; }
+        a.back { display: inline-block; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <a class="back" th:href="@{/passages}">&larr; 一覧に戻る</a>
+    <h1 th:text="${passage.title}">Title</h1>
+    <div class="body-text" th:if="${passage.body != null and !passage.body.isEmpty()}" th:text="${passage.body}"></div>
+
+    <form th:action="@{/passages/{id}/submit(id=${passage.id})}" method="post">
+        <div class="question" th:each="q : ${passage.questions}">
+            <p th:text="${q.questionText}">Question text</p>
+            <label class="choice" th:each="c : ${q.choices}">
+                <input type="radio" th:name="'answer_' + ${q.id}" th:value="${c.id}" required="required" />
+                <span th:text="${c.label} + '. ' + ${c.choiceText}">A. choice</span>
+            </label>
+        </div>
+        <button type="submit">採点する</button>
+    </form>
+</body>
+</html>

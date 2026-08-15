@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="A jogger running along a path in a park">
+  <rect width="600" height="400" fill="#dff3e3"/>
+  <rect x="0" y="300" width="600" height="100" fill="#8fbf7a"/>
+  <path d="M0 330 Q300 290 600 340 L600 400 L0 400 Z" fill="#d8c9a0"/>
+
+  <!-- trees -->
+  <g>
+    <rect x="70" y="230" width="14" height="60" fill="#7a5230"/>
+    <circle cx="77" cy="210" r="42" fill="#3f9142"/>
+  </g>
+  <g>
+    <rect x="500" y="220" width="14" height="70" fill="#7a5230"/>
+    <circle cx="507" cy="196" r="48" fill="#358239"/>
+  </g>
+  <g>
+    <rect x="440" y="250" width="10" height="46" fill="#7a5230"/>
+    <circle cx="445" cy="234" r="30" fill="#4aa14d"/>
+  </g>
+
+  <!-- sun -->
+  <circle cx="520" cy="60" r="30" fill="#fbbf24"/>
+
+  <!-- jogger -->
+  <circle cx="260" cy="250" r="20" fill="#f2c199"/>
+  <path d="M242 245 Q260 224 278 245 L278 250 Q260 236 242 250 Z" fill="#3b2a20"/>
+  <rect x="244" y="268" width="32" height="46" rx="12" fill="#ef4444"/>
+  <path d="M244 280 L216 300" stroke="#f2c199" stroke-width="10" stroke-linecap="round"/>
+  <path d="M276 280 L306 262" stroke="#f2c199" stroke-width="10" stroke-linecap="round"/>
+  <path d="M254 312 L232 352" stroke="#1f2937" stroke-width="12" stroke-linecap="round"/>
+  <path d="M266 312 L296 344" stroke="#1f2937" stroke-width="12" stroke-linecap="round"/>
+</svg>

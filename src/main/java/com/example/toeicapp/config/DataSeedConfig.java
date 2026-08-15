@@ -48,6 +48,18 @@ public class DataSeedConfig {
             if (!existingTitles.contains("Part4 sample")) {
                 passageRepository.save(buildPart4());
             }
+            if (!existingTitles.contains("Part1 sample (office)")) {
+                passageRepository.save(buildPart1Office());
+            }
+            if (!existingTitles.contains("Part1 sample (park)")) {
+                passageRepository.save(buildPart1Park());
+            }
+            if (!existingTitles.contains("Part2 sample (training)")) {
+                passageRepository.save(buildPart2Training());
+            }
+            if (!existingTitles.contains("Part2 sample (invoice)")) {
+                passageRepository.save(buildPart2Invoice());
+            }
         };
     }
 
@@ -212,6 +224,98 @@ public class DataSeedConfig {
         addChoice(q11, "D", "Wait until Monday", false);
 
         return part4;
+    }
+
+    private static Passage buildPart1Office() {
+        Passage part1 = new Passage();
+        part1.setTitle("Part1 sample (office)");
+        part1.setPartType("PART1");
+        part1.setSkillType("LISTENING");
+        part1.setImageUrl("/images/part1-office.svg");
+        part1.setAudioUrl("/audio/part1-office-sample.mp3");
+        part1.setAudioScript("A. The woman is watering the plants.\n"
+                + "B. The man is pointing at the whiteboard.\n"
+                + "C. The chairs are being stacked in the corner.\n"
+                + "D. The window is being cleaned.");
+
+        Question q12 = new Question();
+        q12.setQuestionText("写真を最も適切に描写している文を選びなさい。");
+        q12.setExplanation("The man in the picture is pointing at the whiteboard, which matches statement B.");
+        part1.addQuestion(q12);
+        addChoice(q12, "A", "The woman is watering the plants.", false);
+        addChoice(q12, "B", "The man is pointing at the whiteboard.", true);
+        addChoice(q12, "C", "The chairs are being stacked in the corner.", false);
+        addChoice(q12, "D", "The window is being cleaned.", false);
+
+        return part1;
+    }
+
+    private static Passage buildPart1Park() {
+        Passage part1 = new Passage();
+        part1.setTitle("Part1 sample (park)");
+        part1.setPartType("PART1");
+        part1.setSkillType("LISTENING");
+        part1.setImageUrl("/images/part1-park.svg");
+        part1.setAudioUrl("/audio/part1-park-sample.mp3");
+        part1.setAudioScript("A. The man is riding a bicycle.\n"
+                + "B. The woman is sitting on a bench reading a book.\n"
+                + "C. A jogger is running along the path.\n"
+                + "D. Workers are planting trees.");
+
+        Question q13 = new Question();
+        q13.setQuestionText("写真を最も適切に描写している文を選びなさい。");
+        q13.setExplanation("The picture shows a person jogging along the park path, which matches statement C.");
+        part1.addQuestion(q13);
+        addChoice(q13, "A", "The man is riding a bicycle.", false);
+        addChoice(q13, "B", "The woman is sitting on a bench reading a book.", false);
+        addChoice(q13, "C", "A jogger is running along the path.", true);
+        addChoice(q13, "D", "Workers are planting trees.", false);
+
+        return part1;
+    }
+
+    private static Passage buildPart2Training() {
+        Passage part2 = new Passage();
+        part2.setTitle("Part2 sample (training)");
+        part2.setPartType("PART2");
+        part2.setSkillType("LISTENING");
+        part2.setAudioUrl("/audio/part2-training-sample.mp3");
+        part2.setAudioScript("When does the training session start?\n"
+                + "A. It starts at 9 AM.\n"
+                + "B. In the main conference room.\n"
+                + "C. I already finished it.");
+
+        Question q14 = new Question();
+        q14.setQuestionText("質問に対する最も適切な応答を選びなさい。「When does the training session start?」");
+        q14.setExplanation("The question asks \"when\", so the reply giving a time (9 AM) is correct.");
+        part2.addQuestion(q14);
+        addChoice(q14, "A", "It starts at 9 AM.", true);
+        addChoice(q14, "B", "In the main conference room.", false);
+        addChoice(q14, "C", "I already finished it.", false);
+
+        return part2;
+    }
+
+    private static Passage buildPart2Invoice() {
+        Passage part2 = new Passage();
+        part2.setTitle("Part2 sample (invoice)");
+        part2.setPartType("PART2");
+        part2.setSkillType("LISTENING");
+        part2.setAudioUrl("/audio/part2-invoice-sample.mp3");
+        part2.setAudioScript("Could you send me the invoice by tomorrow?\n"
+                + "A. Yes, at the printer.\n"
+                + "B. Sure, I'll email it this afternoon.\n"
+                + "C. It costs about $200.");
+
+        Question q15 = new Question();
+        q15.setQuestionText("質問に対する最も適切な応答を選びなさい。「Could you send me the invoice by tomorrow?」");
+        q15.setExplanation("The request is agreed to and a concrete plan (emailing it this afternoon) is given.");
+        part2.addQuestion(q15);
+        addChoice(q15, "A", "Yes, at the printer.", false);
+        addChoice(q15, "B", "Sure, I'll email it this afternoon.", true);
+        addChoice(q15, "C", "It costs about $200.", false);
+
+        return part2;
     }
 
     private static void addChoice(Question question, String label, String text, boolean correct) {

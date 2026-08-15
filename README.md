@@ -1,6 +1,6 @@
 # TOEIC App
 
-TOEICの練習問題を解けるWebアプリです。Reading (Part5 / Part6 / Part7) に加えて、Listening (Part3) にも対応しています。
+TOEICの練習問題を解けるWebアプリです。Listening / Readingの主要パート(Part1〜7)に対応しています。
 Spring Boot + Thymeleaf + H2(ファイル保存DB)+ Spring Securityで作られています。
 
 ## 使い方
@@ -14,7 +14,7 @@ Spring Boot + Thymeleaf + H2(ファイル保存DB)+ Spring Securityで作られ�
 - ユーザー名: `Taro`
 - パスワード: `pass`
 
-1. Passage一覧から問題を選ぶ(Reading: Part5/6/7、Listening: Part3)
+1. Passage一覧から問題を選ぶ(Reading: Part5/6/7、Listening: Part1/2/3/4)
 2. Listening問題は音声を再生してから回答する
 3. 選択肢から回答を選んで「採点する」を押す
 4. 正解/不正解と解説(Listeningの場合はスクリプトも)が表示される
@@ -28,6 +28,7 @@ Spring Boot + Thymeleaf + H2(ファイル保存DB)+ Spring Securityで作られ�
 - `config` — Spring Securityの認証設定(`SecurityConfig`)とサンプルデータ/ユーザーの投入(`DataSeedConfig`)
 - `resources/templates` — 一覧・出題・結果・復習画面のHTMLテンプレート
 - `resources/static/audio` — Listening問題の音声ファイル(mp3)
+- `resources/static/images` — Part1(写真描写問題)用のイラスト(svg)
 
 ## Listening音声について
 
@@ -43,5 +44,4 @@ Spring Boot + Thymeleaf + H2(ファイル保存DB)+ Spring Securityで作られ�
 
 ## 今後の課題
 
-- Listening Part1/2/4への対応
 - スコア履歴の可視化

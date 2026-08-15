@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="A man pointing at a whiteboard while a woman sits at a table">
+  <rect width="600" height="400" fill="#eef2f5"/>
+  <rect x="0" y="300" width="600" height="100" fill="#d9c9a8"/>
+
+  <!-- whiteboard -->
+  <rect x="40" y="40" width="220" height="150" rx="4" fill="#ffffff" stroke="#9aa5b1" stroke-width="4"/>
+  <line x1="60" y1="80" x2="180" y2="80" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+  <line x1="60" y1="105" x2="220" y2="105" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+  <line x1="60" y1="130" x2="150" y2="130" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- table -->
+  <rect x="300" y="260" width="260" height="20" rx="4" fill="#a9744f"/>
+  <rect x="310" y="280" width="20" height="60" fill="#8a5d3b"/>
+  <rect x="530" y="280" width="20" height="60" fill="#8a5d3b"/>
+
+  <!-- seated woman at table -->
+  <circle cx="420" cy="220" r="24" fill="#f2c199"/>
+  <path d="M396 214 Q420 186 444 214 L444 224 Q420 206 396 224 Z" fill="#5b3a29"/>
+  <rect x="392" y="244" width="56" height="50" rx="14" fill="#c2410c"/>
+
+  <!-- standing man pointing at whiteboard -->
+  <circle cx="270" cy="150" r="22" fill="#f2c199"/>
+  <path d="M250 144 Q270 122 290 144 L290 150 Q270 134 250 150 Z" fill="#2b2b2b"/>
+  <rect x="248" y="172" width="44" height="90" rx="12" fill="#1d4ed8"/>
+  <rect x="176" y="176" width="76" height="14" rx="7" fill="#f2c199" transform="rotate(-18 252 183)"/>
+  <rect x="248" y="262" width="16" height="60" fill="#374151"/>
+  <rect x="276" y="262" width="16" height="60" fill="#374151"/>
+</svg>

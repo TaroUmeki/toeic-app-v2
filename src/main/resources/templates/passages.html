@@ -12,14 +12,21 @@
         .meta { color: #666; font-size: 0.85rem; margin-top: 4px; }
         .review-link { display: inline-block; margin-bottom: 16px; }
         .badge { background: #e01b24; color: #fff; border-radius: 999px; padding: 2px 8px; font-size: 0.8rem; margin-left: 6px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .logout-btn { background: none; border: none; padding: 0; font-family: inherit; font-size: 0.9rem; font-weight: bold; color: #1a5fb4; cursor: pointer; text-decoration: none; }
     </style>
 </head>
 <body>
     <h1>TOEIC Reading Practice</h1>
-    <a class="review-link" th:href="@{/review}">
-        復習する
-        <span class="badge" th:if="${reviewCount > 0}" th:text="${reviewCount}">3</span>
-    </a>
+    <div class="topbar">
+        <a class="review-link" th:href="@{/review}">
+            復習する
+            <span class="badge" th:if="${reviewCount > 0}" th:text="${reviewCount}">3</span>
+        </a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-btn">ログアウト</button>
+        </form>
+    </div>
     <ul>
         <li th:each="p : ${passages}">
             <a th:href="@{/passages/{id}(id=${p.id})}" th:text="${p.title}">Title</a>

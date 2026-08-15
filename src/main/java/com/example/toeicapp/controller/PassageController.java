@@ -1,10 +1,13 @@
 package com.example.toeicapp.controller;
 
 import com.example.toeicapp.model.Choice;
+import com.example.toeicapp.model.MissedQuestion;
 import com.example.toeicapp.model.Passage;
 import com.example.toeicapp.model.Question;
+import com.example.toeicapp.model.User;
+import com.example.toeicapp.repository.MissedQuestionRepository;
 import com.example.toeicapp.repository.PassageRepository;
-import jakarta.servlet.http.HttpSession;
+import com.example.toeicapp.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,25 +16,31 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/passages")
 public class PassageController {
 
     private final PassageRepository passageRepository;
+    private final UserRepository userRepository;
+    private final MissedQuestionRepository missedQuestionRepository;
 
-    public PassageController(PassageRepository passageRepository) {
+    public PassageController(PassageRepository passageRepository, UserRepository userRepository,
+                              MissedQuestionRepository missedQuestionRepository) {
         this.passageRepository = passageRepository;
+        this.userRepository = userRepository;
+        this.missedQuestionRepository = missedQuestionRepository;
     }
 
     @GetMapping
-    public String list(HttpSession session, Model model) {
+    public String list(Principal principal, Model model) {
+        User user = CurrentUser.resolve(principal, userRepository);
         model.addAttribute("passages", passageRepository.findAll());
-        model.addAttribute("reviewCount", ReviewTracker.incorrectIds(session).size());
+        model.addAttribute("reviewCount", missedQuestionRepository.countByUser(user));
         return "passages";
     }
 
@@ -44,11 +53,11 @@ public class PassageController {
     }
 
     @PostMapping("/{id}/submit")
-    public String submit(@PathVariable Long id, @RequestParam Map<String, String> params, HttpSession session, Model model) {
+    public String submit(@PathVariable Long id, @RequestParam Map<String, String> params, Principal principal, Model model) {
         Passage passage = passageRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Passage not found: " + id));
+        User user = CurrentUser.resolve(principal, userRepository);
 
-        Set<Long> incorrectIds = ReviewTracker.incorrectIds(session);
         List<QuestionResult> results = new ArrayList<>();
         int correctCount = 0;
         for (Question q : passage.getQuestions()) {
@@ -61,9 +70,9 @@ public class PassageController {
             boolean correct = correctChoice != null && correctChoice.getId().equals(selectedId);
             if (correct) {
                 correctCount++;
-                incorrectIds.remove(q.getId());
-            } else {
-                incorrectIds.add(q.getId());
+                missedQuestionRepository.findByUserAndQuestion(user, q).ifPresent(missedQuestionRepository::delete);
+            } else if (missedQuestionRepository.findByUserAndQuestion(user, q).isEmpty()) {
+                missedQuestionRepository.save(new MissedQuestion(user, q));
             }
             results.add(new QuestionResult(q, correctChoice, correct));
         }

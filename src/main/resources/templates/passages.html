@@ -10,10 +10,16 @@
         li { margin-bottom: 12px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
         a { text-decoration: none; color: #1a5fb4; font-weight: bold; }
         .meta { color: #666; font-size: 0.85rem; margin-top: 4px; }
+        .review-link { display: inline-block; margin-bottom: 16px; }
+        .badge { background: #e01b24; color: #fff; border-radius: 999px; padding: 2px 8px; font-size: 0.8rem; margin-left: 6px; }
     </style>
 </head>
 <body>
     <h1>TOEIC Reading Practice</h1>
+    <a class="review-link" th:href="@{/review}">
+        復習する
+        <span class="badge" th:if="${reviewCount > 0}" th:text="${reviewCount}">3</span>
+    </a>
     <ul>
         <li th:each="p : ${passages}">
             <a th:href="@{/passages/{id}(id=${p.id})}" th:text="${p.title}">Title</a>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>復習</title>
+    <style>
+        body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 16px; color: #222; }
+        .passage-group { margin-bottom: 32px; }
+        .passage-group h2 { font-size: 1.1rem; margin-bottom: 8px; }
+        .body-text { white-space: pre-line; background: #f7f7f7; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+        .question { margin-bottom: 16px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+        .choice { display: block; margin: 6px 0; }
+        button { padding: 10px 20px; font-size: 1rem; cursor: pointer; }
+        a.back { display: inline-block; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <a class="back" th:href="@{/passages}">&larr; 一覧に戻る</a>
+    <h1>復習</h1>
+
+    <p th:if="${groups.isEmpty()}">今は復習すべき問題はありません。</p>
+
+    <form th:if="${!groups.isEmpty()}" th:action="@{/review/submit}" method="post">
+        <div class="passage-group" th:each="g : ${groups}">
+            <h2 th:text="${g.passage.title}">Passage title</h2>
+            <div class="body-text" th:if="${g.passage.body != null and !g.passage.body.isEmpty()}" th:text="${g.passage.body}"></div>
+
+            <div class="question" th:each="q : ${g.questions}">
+                <p th:text="${q.questionText}">Question text</p>
+                <label class="choice" th:each="c : ${q.choices}">
+                    <input type="radio" th:name="'answer_' + ${q.id}" th:value="${c.id}" required="required" />
+                    <span th:text="${c.label} + '. ' + ${c.choiceText}">A. choice</span>
+                </label>
+            </div>
+        </div>
+        <button type="submit">採点する</button>
+    </form>
+</body>
+</html>

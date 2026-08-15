@@ -4,6 +4,7 @@ import com.example.toeicapp.model.Choice;
 import com.example.toeicapp.model.Passage;
 import com.example.toeicapp.model.Question;
 import com.example.toeicapp.repository.PassageRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/passages")
@@ -27,8 +29,9 @@ public class PassageController {
     }
 
     @GetMapping
-    public String list(Model model) {
+    public String list(HttpSession session, Model model) {
         model.addAttribute("passages", passageRepository.findAll());
+        model.addAttribute("reviewCount", ReviewTracker.incorrectIds(session).size());
         return "passages";
     }
 
@@ -41,10 +44,11 @@ public class PassageController {
     }
 
     @PostMapping("/{id}/submit")
-    public String submit(@PathVariable Long id, @RequestParam Map<String, String> params, Model model) {
+    public String submit(@PathVariable Long id, @RequestParam Map<String, String> params, HttpSession session, Model model) {
         Passage passage = passageRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Passage not found: " + id));
 
+        Set<Long> incorrectIds = ReviewTracker.incorrectIds(session);
         List<QuestionResult> results = new ArrayList<>();
         int correctCount = 0;
         for (Question q : passage.getQuestions()) {
@@ -57,6 +61,9 @@ public class PassageController {
             boolean correct = correctChoice != null && correctChoice.getId().equals(selectedId);
             if (correct) {
                 correctCount++;
+                incorrectIds.remove(q.getId());
+            } else {
+                incorrectIds.add(q.getId());
             }
             results.add(new QuestionResult(q, correctChoice, correct));
         }

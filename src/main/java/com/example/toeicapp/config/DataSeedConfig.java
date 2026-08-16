@@ -42,6 +42,9 @@ public class DataSeedConfig {
             if (!existingTitles.contains("Part7 sample")) {
                 passageRepository.save(buildPart7());
             }
+            if (!existingTitles.contains("Part7 sample (advertisement & e-mail)")) {
+                passageRepository.save(buildPart7Double());
+            }
             if (!existingTitles.contains("Part3 sample")) {
                 passageRepository.save(buildPart3());
             }
@@ -139,6 +142,89 @@ public class DataSeedConfig {
         addChoice(q5, "B", "Maintenance", true);
         addChoice(q5, "C", "Meeting", false);
         addChoice(q5, "D", "Inspection", false);
+
+        return part7;
+    }
+
+    private static Passage buildPart7Double() {
+        Passage part7 = new Passage();
+        part7.setTitle("Part7 sample (advertisement & e-mail)");
+        part7.setPartType("PART7");
+        part7.setSkillType("READING");
+        part7.setBody(
+                "Questions 176-180 refer to the following advertisement and e-mail.\n\n"
+                + "[Advertisement]\n"
+                + "QuickPrint Solutions\n"
+                + "Professional Printing for Every Occasion\n\n"
+                + "Need business cards, brochures, or banners printed quickly and affordably? QuickPrint Solutions has you covered! "
+                + "Visit quickprintsolutions.com to view samples of our previous work and get an instant price quote.\n\n"
+                + "Services We Offer:\n"
+                + "1. Business Card Printing - Choose from dozens of templates or upload your own design.\n"
+                + "2. Large-Format Banners - Perfect for trade shows, store openings, and outdoor events.\n"
+                + "3. Custom Design Services - Our in-house designers can create a design from scratch based on your ideas.\n"
+                + "4. Rush Order Processing - Need it fast? We offer next-day delivery for an additional fee.\n\n"
+                + "To place an order, e-mail us at orders@quickprintsolutions.com with your requirements, and a representative "
+                + "will respond within one business day with a detailed quote.\n\n"
+                + "[E-mail]\n"
+                + "To: orders@quickprintsolutions.com\n"
+                + "From: r.tanaka@harborcafe.com\n"
+                + "Date: March 3\n"
+                + "Subject: Printing Request\n\n"
+                + "I came across your website while searching for a local printing company and would like to place an order "
+                + "for my new cafe. I need 500 business cards featuring our logo, which I can send as an attachment, and I was "
+                + "also hoping to get a large banner made for our grand opening event on March 20. Since the event is coming "
+                + "up soon, I would appreciate a quick turnaround if possible. Could you let me know the cost for both items, "
+                + "including any rush fees? You can reach me at my office phone between 9:00 A.M. and 4:00 P.M.\n\n"
+                + "Thank you,\n"
+                + "Ryo Tanaka\n"
+                + "Harbor Cafe\n"
+                + "045-555-2938"
+        );
+
+        Question q176 = new Question();
+        q176.setQuestionText("According to the advertisement, why should customers visit the QuickPrint Solutions Web site?");
+        q176.setExplanation("The advertisement says to visit the Web site to view samples of previous work and get an instant price quote.");
+        part7.addQuestion(q176);
+        addChoice(q176, "A", "To view samples of previous work", true);
+        addChoice(q176, "B", "To submit a payment", false);
+        addChoice(q176, "C", "To download a design template", false);
+        addChoice(q176, "D", "To contact a representative by phone", false);
+
+        Question q177 = new Question();
+        q177.setQuestionText("What is suggested about QuickPrint Solutions?");
+        q177.setExplanation("Because the ad offers a custom design service for customers without their own design, it can be inferred that not all customers arrive with a finished design.");
+        part7.addQuestion(q177);
+        addChoice(q177, "A", "It only accepts orders by phone.", false);
+        addChoice(q177, "B", "It offers a design service for customers without their own designs.", true);
+        addChoice(q177, "C", "It specializes in outdoor advertising only.", false);
+        addChoice(q177, "D", "It recently opened a new office.", false);
+
+        Question q178 = new Question();
+        q178.setQuestionText("Who most likely is Mr. Tanaka?");
+        q178.setExplanation("He refers to \"my new cafe\" and \"our grand opening event,\" indicating he owns the business.");
+        part7.addQuestion(q178);
+        addChoice(q178, "A", "A graphic designer", false);
+        addChoice(q178, "B", "A printing company employee", false);
+        addChoice(q178, "C", "A business owner", true);
+        addChoice(q178, "D", "A delivery driver", false);
+
+        Question q179 = new Question();
+        q179.setQuestionText("What service does Mr. Tanaka NOT request from QuickPrint Solutions?");
+        q179.setExplanation("He already has a logo to send as an attachment, so he does not request custom design services.");
+        part7.addQuestion(q179);
+        addChoice(q179, "A", "Business card printing", false);
+        addChoice(q179, "B", "Rush order processing", false);
+        addChoice(q179, "C", "Custom design services", true);
+        addChoice(q179, "D", "Banner printing", false);
+
+        Question q180 = new Question();
+        q180.setQuestionText("What will Mr. Tanaka most likely do next?");
+        q180.setExplanation("He asks to be told the cost for both items, so he is most likely waiting for a price quote from QuickPrint Solutions.");
+        part7.addQuestion(q180);
+        addChoice(q180, "A", "Visit the QuickPrint Solutions office", false);
+        addChoice(q180, "B", "Wait for a price quote", true);
+        addChoice(q180, "C", "Attend a trade show", false);
+        addChoice(q180, "D", "Design a business card", false);
 
         return part7;
     }

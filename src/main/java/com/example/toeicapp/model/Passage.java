@@ -3,6 +3,7 @@ package com.example.toeicapp.model;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "passage")
@@ -65,5 +66,53 @@ public class Passage {
     public void removeQuestion(Question q) {
         questions.remove(q);
         q.setPassage(null);
+    }
+
+    private static final Pattern SECTION_HEADER = Pattern.compile("^\\[(.+)\\]$");
+
+    /**
+     * Splits body text into sections on lines like "[Advertisement]" so a passage
+     * made of multiple documents (ad + e-mail, two e-mails, etc.) can be rendered
+     * as separate boxes instead of one run-on block.
+     */
+    public List<BodySection> getBodySections() {
+        List<BodySection> sections = new ArrayList<>();
+        if (body == null || body.isEmpty()) {
+            return sections;
+        }
+        String label = null;
+        StringBuilder current = new StringBuilder();
+        for (String line : body.split("\n", -1)) {
+            var matcher = SECTION_HEADER.matcher(line.trim());
+            if (matcher.matches()) {
+                addSection(sections, label, current);
+                label = matcher.group(1);
+            } else {
+                current.append(line).append("\n");
+            }
+        }
+        addSection(sections, label, current);
+        return sections;
+    }
+
+    private static void addSection(List<BodySection> sections, String label, StringBuilder text) {
+        String trimmed = text.toString().trim();
+        if (!trimmed.isEmpty()) {
+            sections.add(new BodySection(label, trimmed));
+        }
+        text.setLength(0);
+    }
+
+    public static class BodySection {
+        private final String label;
+        private final String text;
+
+        public BodySection(String label, String text) {
+            this.label = label;
+            this.text = text;
+        }
+
+        public String getLabel() { return label; }
+        public String getText() { return text; }
     }
 }

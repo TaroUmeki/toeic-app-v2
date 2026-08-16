@@ -20,12 +20,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/passages")
 public class PassageController {
+
+    private static final Map<String, String> PART_LABELS = new LinkedHashMap<>();
+    static {
+        PART_LABELS.put("PART1", "Part1 - 写真描写問題");
+        PART_LABELS.put("PART2", "Part2 - 応答問題");
+        PART_LABELS.put("PART3", "Part3 - 会話問題");
+        PART_LABELS.put("PART4", "Part4 - 説明文問題");
+        PART_LABELS.put("PART5", "Part5 - 短文穴埋め問題");
+        PART_LABELS.put("PART6", "Part6 - 長文穴埋め問題");
+        PART_LABELS.put("PART7", "Part7 - 読解問題");
+    }
 
     private final PassageRepository passageRepository;
     private final UserRepository userRepository;
@@ -44,7 +56,29 @@ public class PassageController {
     @GetMapping
     public String list(Principal principal, Model model) {
         User user = CurrentUser.resolve(principal, userRepository);
-        model.addAttribute("passages", passageRepository.findAll(Sort.by("partType")));
+        Map<String, Long> countsByPart = new LinkedHashMap<>();
+        for (Passage p : passageRepository.findAll()) {
+            countsByPart.merge(p.getPartType(), 1L, Long::sum);
+        }
+        List<Part> parts = new ArrayList<>();
+        for (Map.Entry<String, String> entry : PART_LABELS.entrySet()) {
+            Long count = countsByPart.get(entry.getKey());
+            if (count != null) {
+                parts.add(new Part(entry.getKey(), entry.getValue(), count));
+            }
+        }
+        model.addAttribute("parts", parts);
+        model.addAttribute("reviewCount", missedQuestionRepository.countByUser(user));
+        model.addAttribute("streak", StudyActivityTracker.currentStreak(user, studyActivityRepository));
+        return "parts";
+    }
+
+    @GetMapping("/part/{partType}")
+    public String listByPart(@PathVariable String partType, Principal principal, Model model) {
+        User user = CurrentUser.resolve(principal, userRepository);
+        model.addAttribute("passages", passageRepository.findByPartType(partType, Sort.by("title")));
+        model.addAttribute("partType", partType);
+        model.addAttribute("partLabel", PART_LABELS.getOrDefault(partType, partType));
         model.addAttribute("reviewCount", missedQuestionRepository.countByUser(user));
         model.addAttribute("streak", StudyActivityTracker.currentStreak(user, studyActivityRepository));
         return "passages";
@@ -89,6 +123,22 @@ public class PassageController {
         model.addAttribute("correctCount", correctCount);
         model.addAttribute("total", passage.getQuestions().size());
         return "result";
+    }
+
+    public static class Part {
+        private final String partType;
+        private final String label;
+        private final long count;
+
+        public Part(String partType, String label, long count) {
+            this.partType = partType;
+            this.label = label;
+            this.count = count;
+        }
+
+        public String getPartType() { return partType; }
+        public String getLabel() { return label; }
+        public long getCount() { return count; }
     }
 
     public static class QuestionResult {

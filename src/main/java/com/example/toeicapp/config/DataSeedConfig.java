@@ -4,6 +4,7 @@ import com.example.toeicapp.model.Choice;
 import com.example.toeicapp.model.Passage;
 import com.example.toeicapp.model.Question;
 import com.example.toeicapp.model.User;
+import com.example.toeicapp.repository.MissedQuestionRepository;
 import com.example.toeicapp.repository.PassageRepository;
 import com.example.toeicapp.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,17 +29,16 @@ public class DataSeedConfig {
     }
 
     @Bean
-    public CommandLineRunner seedPassages(PassageRepository passageRepository) {
+    public CommandLineRunner seedPassages(PassageRepository passageRepository, MissedQuestionRepository missedQuestionRepository) {
         return args -> {
+            upsertPart6(passageRepository, missedQuestionRepository);
+
             Set<String> existingTitles = passageRepository.findAll().stream()
                     .map(Passage::getTitle)
                     .collect(Collectors.toSet());
 
             if (!existingTitles.contains("Part5 sample")) {
                 passageRepository.save(buildPart5());
-            }
-            if (!existingTitles.contains("Part6 sample")) {
-                passageRepository.save(buildPart6());
             }
             if (!existingTitles.contains("Part7 sample")) {
                 passageRepository.save(buildPart7());
@@ -90,32 +91,87 @@ public class DataSeedConfig {
         part6.setTitle("Part6 sample");
         part6.setPartType("PART6");
         part6.setSkillType("READING");
-        part6.setBody("Dear team,\n\n"
-                + "Please review the attached report [1] provide feedback by end of day. "
-                + "The report should be [2] before the meeting.\n\n"
-                + "Best,\nManager");
+        part6.setBody(
+                "Questions 131-134 refer to the following e-mail.\n\n"
+                + "To: Branch Managers\n"
+                + "From: Elena Cho\n"
+                + "Subject: Customer Service Workshop\n\n"
+                + "Dear Branch Managers,\n\n"
+                + "Starting next month, we will be holding a series of workshops for -----(131)----- new hires. "
+                + "At Riverton Retail, we believe that with the proper guidance from our senior staff, newer "
+                + "employees can quickly -----(132)----- the skills they need to serve customers confidently. "
+                + "-----(133)-----, they can build stronger relationships with regular customers over time. "
+                + "When employees at every level continue to learn, the whole store benefits.\n\n"
+                + "For that reason, we are asking each branch manager to encourage at least two staff members "
+                + "to attend. -----(134)-----\n\n"
+                + "Thank you for your cooperation.\n\n"
+                + "Elena Cho\nTraining Department\nRiverton Retail"
+        );
 
-        Question q2 = new Question();
-        q2.setQuestionText("空欄(1)に入る最も適切な語を選びなさい。");
-        q2.setBlankNumber(1);
-        q2.setExplanation("Connective phrase.");
-        part6.addQuestion(q2);
-        addChoice(q2, "A", "and", true);
-        addChoice(q2, "B", "so", false);
-        addChoice(q2, "C", "but", false);
-        addChoice(q2, "D", "or", false);
+        Question q131 = new Question();
+        q131.setQuestionText("文中の (131) に入る最も適切な語を選びなさい。");
+        q131.setBlankNumber(131);
+        q131.setExplanation("\"interested\"（形容詞）が \"new hires\" を修飾し、「関心のある新入社員」という意味になる。");
+        part6.addQuestion(q131);
+        addChoice(q131, "A", "interest", false);
+        addChoice(q131, "B", "interests", false);
+        addChoice(q131, "C", "interested", true);
+        addChoice(q131, "D", "interesting", false);
 
-        Question q3 = new Question();
-        q3.setQuestionText("空欄(2)に入る最も適切な語を選びなさい。");
-        q3.setBlankNumber(2);
-        q3.setExplanation("Timing.");
-        part6.addQuestion(q3);
-        addChoice(q3, "A", "sent", false);
-        addChoice(q3, "B", "finalized", true);
-        addChoice(q3, "C", "delayed", false);
-        addChoice(q3, "D", "ignored", false);
+        Question q132 = new Question();
+        q132.setQuestionText("文中の (132) に入る最も適切な語を選びなさい。");
+        q132.setBlankNumber(132);
+        q132.setExplanation("\"develop skills\"（スキルを身につける）が自然なコロケーション。");
+        part6.addQuestion(q132);
+        addChoice(q132, "A", "develop", true);
+        addChoice(q132, "B", "raise", false);
+        addChoice(q132, "C", "open", false);
+        addChoice(q132, "D", "complete", false);
+
+        Question q133 = new Question();
+        q133.setQuestionText("文中の (133) に入る最も適切な語句を選びなさい。");
+        q133.setBlankNumber(133);
+        q133.setExplanation("前文の内容に加えて同時に起こる利点を述べているため、「At the same time（それと同時に）」が適切。");
+        part6.addQuestion(q133);
+        addChoice(q133, "A", "After all", false);
+        addChoice(q133, "B", "For", false);
+        addChoice(q133, "C", "Even so", false);
+        addChoice(q133, "D", "At the same time", true);
+
+        Question q134 = new Question();
+        q134.setQuestionText("文中の (134) に入る最も適切な文を選びなさい。");
+        q134.setBlankNumber(134);
+        q134.setExplanation("直前で「参加を勧めてほしい」と依頼しているため、参加予定者を報告するよう求める文が自然につながる。");
+        part6.addQuestion(q134);
+        addChoice(q134, "A", "We will announce the training schedule by the end of this week.", false);
+        addChoice(q134, "B", "Please let us know which employees plan to attend by Friday.", true);
+        addChoice(q134, "C", "Unfortunately, this year's workshop has been cancelled.", false);
+        addChoice(q134, "D", "The cafeteria will be closed during the renovation.", false);
 
         return part6;
+    }
+
+    private static void upsertPart6(PassageRepository passageRepository, MissedQuestionRepository missedQuestionRepository) {
+        Passage existing = passageRepository.findByTitleWithQuestions("Part6 sample").orElse(null);
+
+        if (existing == null) {
+            passageRepository.save(buildPart6());
+            return;
+        }
+        if (existing.getBody() != null && existing.getBody().contains("(131)")) {
+            return;
+        }
+
+        Passage rebuilt = buildPart6();
+        for (Question oldQuestion : new ArrayList<>(existing.getQuestions())) {
+            missedQuestionRepository.deleteByQuestion(oldQuestion);
+        }
+        existing.getQuestions().clear();
+        existing.setBody(rebuilt.getBody());
+        for (Question q : rebuilt.getQuestions()) {
+            existing.addQuestion(q);
+        }
+        passageRepository.save(existing);
     }
 
     private static Passage buildPart7() {

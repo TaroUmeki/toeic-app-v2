@@ -12,4 +12,5 @@ public interface MissedQuestionRepository extends JpaRepository<MissedQuestion, 
     List<MissedQuestion> findByUser(User user);
     Optional<MissedQuestion> findByUserAndQuestion(User user, Question question);
     long countByUser(User user);
+    void deleteByQuestion(Question question);
 }

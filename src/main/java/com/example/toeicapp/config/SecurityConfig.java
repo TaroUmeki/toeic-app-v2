@@ -37,7 +37,6 @@ public class SecurityConfig {
         AntPathRequestMatcher register = new AntPathRequestMatcher("/register");
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(h2Console).permitAll()
                         .requestMatchers(register).permitAll()
                         .anyRequest().authenticated()
                 )
